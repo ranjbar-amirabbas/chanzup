@@ -30,4 +30,16 @@ public class ApplicationMetrics
         _logger.LogDebug("Game Metric - Type: {GameType}, Action: {Action}, Business: {BusinessId}, Player: {PlayerId}",
             gameType, action, businessId, playerId);
     }
+
+    public void SetActivePlayers(int count)
+    {
+        _logger.LogDebug("Active Players Gauge: {Count}", count);
+        // TODO: Set gauge metric for active players
+    }
+
+    public void SetActiveCampaigns(int count)
+    {
+        _logger.LogDebug("Active Campaigns Gauge: {Count}", count);
+        // TODO: Set gauge metric for active campaigns
+    }
 }

@@ -3,6 +3,7 @@ using Swashbuckle.AspNetCore.SwaggerGen;
 using System.Reflection;
 using Microsoft.AspNetCore.Authorization;
 using Chanzup.API.Authorization;
+using Microsoft.OpenApi.Any;
 
 namespace Chanzup.API.Configuration;
 
@@ -44,30 +45,29 @@ public class SwaggerExampleFilter : IOperationFilter
         {
             var example = actionName switch
             {
-                var name when name.Contains("business") => new
+                var name when name.Contains("business") => new OpenApiObject
                 {
-                    email = "owner@coffeeshop.com",
-                    password = "DemoPassword123!"
+                    ["email"] = new OpenApiString("owner@coffeeshop.com"),
+                    ["password"] = new OpenApiString("DemoPassword123!")
                 },
-                var name when name.Contains("player") => new
+                var name when name.Contains("player") => new OpenApiObject
                 {
-                    email = "demo@player.com",
-                    password = "PlayerPassword123!"
+                    ["email"] = new OpenApiString("demo@player.com"),
+                    ["password"] = new OpenApiString("PlayerPassword123!")
                 },
-                var name when name.Contains("admin") => new
+                var name when name.Contains("admin") => new OpenApiObject
                 {
-                    email = "admin@chanzup.com",
-                    password = "AdminPassword123!"
+                    ["email"] = new OpenApiString("admin@chanzup.com"),
+                    ["password"] = new OpenApiString("AdminPassword123!")
                 },
-                _ => new
+                _ => new OpenApiObject
                 {
-                    email = "user@example.com",
-                    password = "Password123!"
+                    ["email"] = new OpenApiString("user@example.com"),
+                    ["password"] = new OpenApiString("Password123!")
                 }
             };
 
-            operation.RequestBody.Content["application/json"].Example = 
-                Microsoft.OpenApi.Any.OpenApiAnyFactory.CreateFromJson(System.Text.Json.JsonSerializer.Serialize(example));
+            operation.RequestBody.Content["application/json"].Example = example;
         }
     }
 
@@ -75,20 +75,19 @@ public class SwaggerExampleFilter : IOperationFilter
     {
         if (operation.RequestBody?.Content?.ContainsKey("application/json") == true)
         {
-            var example = new
+            var example = new OpenApiObject
             {
-                businessName = "My Coffee Shop",
-                email = "owner@mycoffeeshop.com",
-                password = "SecurePassword123!",
-                phone = "+1-555-123-4567",
-                address = "123 Main Street, City, State 12345",
-                latitude = 40.7128,
-                longitude = -74.0060,
-                subscriptionTier = 1
+                ["businessName"] = new OpenApiString("My Coffee Shop"),
+                ["email"] = new OpenApiString("owner@mycoffeeshop.com"),
+                ["password"] = new OpenApiString("SecurePassword123!"),
+                ["phone"] = new OpenApiString("+1-555-123-4567"),
+                ["address"] = new OpenApiString("123 Main Street, City, State 12345"),
+                ["latitude"] = new OpenApiDouble(40.7128),
+                ["longitude"] = new OpenApiDouble(-74.0060),
+                ["subscriptionTier"] = new OpenApiInteger(1)
             };
 
-            operation.RequestBody.Content["application/json"].Example = 
-                Microsoft.OpenApi.Any.OpenApiAnyFactory.CreateFromJson(System.Text.Json.JsonSerializer.Serialize(example));
+            operation.RequestBody.Content["application/json"].Example = example;
         }
     }
 
@@ -96,20 +95,19 @@ public class SwaggerExampleFilter : IOperationFilter
     {
         if (operation.RequestBody?.Content?.ContainsKey("application/json") == true && actionName.Contains("create"))
         {
-            var example = new
+            var example = new OpenApiObject
             {
-                name = "Summer Promotion",
-                description = "Spin the wheel for summer prizes!",
-                gameType = 0, // WheelOfLuck
-                tokenCostPerSpin = 5,
-                maxSpinsPerDay = 3,
-                startDate = DateTime.UtcNow.ToString("yyyy-MM-ddTHH:mm:ss.fffZ"),
-                endDate = DateTime.UtcNow.AddDays(30).ToString("yyyy-MM-ddTHH:mm:ss.fffZ"),
-                isActive = true
+                ["name"] = new OpenApiString("Summer Promotion"),
+                ["description"] = new OpenApiString("Spin the wheel for summer prizes!"),
+                ["gameType"] = new OpenApiInteger(0), // WheelOfLuck
+                ["tokenCostPerSpin"] = new OpenApiInteger(5),
+                ["maxSpinsPerDay"] = new OpenApiInteger(3),
+                ["startDate"] = new OpenApiString(DateTime.UtcNow.ToString("yyyy-MM-ddTHH:mm:ss.fffZ")),
+                ["endDate"] = new OpenApiString(DateTime.UtcNow.AddDays(30).ToString("yyyy-MM-ddTHH:mm:ss.fffZ")),
+                ["isActive"] = new OpenApiBoolean(true)
             };
 
-            operation.RequestBody.Content["application/json"].Example = 
-                Microsoft.OpenApi.Any.OpenApiAnyFactory.CreateFromJson(System.Text.Json.JsonSerializer.Serialize(example));
+            operation.RequestBody.Content["application/json"].Example = example;
         }
     }
 
@@ -117,19 +115,18 @@ public class SwaggerExampleFilter : IOperationFilter
     {
         if (operation.RequestBody?.Content?.ContainsKey("application/json") == true && actionName.Contains("create"))
         {
-            var example = new
+            var example = new OpenApiObject
             {
-                name = "Free Coffee",
-                description = "One free regular coffee",
-                value = 5.00,
-                currency = "USD",
-                totalQuantity = 100,
-                winProbability = 0.25,
-                isActive = true
+                ["name"] = new OpenApiString("Free Coffee"),
+                ["description"] = new OpenApiString("One free regular coffee"),
+                ["value"] = new OpenApiDouble(5.00),
+                ["currency"] = new OpenApiString("USD"),
+                ["totalQuantity"] = new OpenApiInteger(100),
+                ["winProbability"] = new OpenApiDouble(0.25),
+                ["isActive"] = new OpenApiBoolean(true)
             };
 
-            operation.RequestBody.Content["application/json"].Example = 
-                Microsoft.OpenApi.Any.OpenApiAnyFactory.CreateFromJson(System.Text.Json.JsonSerializer.Serialize(example));
+            operation.RequestBody.Content["application/json"].Example = example;
         }
     }
 
@@ -138,12 +135,16 @@ public class SwaggerExampleFilter : IOperationFilter
         // Add 401 Unauthorized example
         if (operation.Responses.ContainsKey("401"))
         {
-            var unauthorizedExample = new { error = "Unauthorized", message = "Invalid or missing authentication token" };
+            var unauthorizedExample = new OpenApiObject
+            {
+                ["error"] = new OpenApiString("Unauthorized"),
+                ["message"] = new OpenApiString("Invalid or missing authentication token")
+            };
             operation.Responses["401"].Content = new Dictionary<string, OpenApiMediaType>
             {
                 ["application/json"] = new OpenApiMediaType
                 {
-                    Example = Microsoft.OpenApi.Any.OpenApiAnyFactory.CreateFromJson(System.Text.Json.JsonSerializer.Serialize(unauthorizedExample))
+                    Example = unauthorizedExample
                 }
             };
         }
@@ -151,12 +152,16 @@ public class SwaggerExampleFilter : IOperationFilter
         // Add 403 Forbidden example
         if (operation.Responses.ContainsKey("403"))
         {
-            var forbiddenExample = new { error = "Forbidden", message = "Insufficient permissions to access this resource" };
+            var forbiddenExample = new OpenApiObject
+            {
+                ["error"] = new OpenApiString("Forbidden"),
+                ["message"] = new OpenApiString("Insufficient permissions to access this resource")
+            };
             operation.Responses["403"].Content = new Dictionary<string, OpenApiMediaType>
             {
                 ["application/json"] = new OpenApiMediaType
                 {
-                    Example = Microsoft.OpenApi.Any.OpenApiAnyFactory.CreateFromJson(System.Text.Json.JsonSerializer.Serialize(forbiddenExample))
+                    Example = forbiddenExample
                 }
             };
         }
@@ -164,12 +169,16 @@ public class SwaggerExampleFilter : IOperationFilter
         // Add 500 Internal Server Error example
         if (operation.Responses.ContainsKey("500"))
         {
-            var errorExample = new { error = "Internal server error", message = "An unexpected error occurred" };
+            var errorExample = new OpenApiObject
+            {
+                ["error"] = new OpenApiString("Internal server error"),
+                ["message"] = new OpenApiString("An unexpected error occurred")
+            };
             operation.Responses["500"].Content = new Dictionary<string, OpenApiMediaType>
             {
                 ["application/json"] = new OpenApiMediaType
                 {
-                    Example = Microsoft.OpenApi.Any.OpenApiAnyFactory.CreateFromJson(System.Text.Json.JsonSerializer.Serialize(errorExample))
+                    Example = errorExample
                 }
             };
         }
@@ -329,7 +338,7 @@ public class SwaggerEnumSchemaFilter : ISchemaFilter
                 var enumMember = context.Type.GetMember(enumValue.ToString()!).FirstOrDefault();
                 var description = enumMember?.GetCustomAttribute<System.ComponentModel.DescriptionAttribute>()?.Description ?? enumValue.ToString();
                 
-                schema.Enum.Add(Microsoft.OpenApi.Any.OpenApiAnyFactory.CreateFromJson($"{(int)enumValue}"));
+                schema.Enum.Add(new OpenApiInteger((int)enumValue));
                 enumValues.Add($"{(int)enumValue}: {enumValue} - {description}");
             }
 

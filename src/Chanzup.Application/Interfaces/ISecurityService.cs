@@ -8,9 +8,3 @@ public interface ISecurityService
     Task LogSecurityEventAsync(string eventType, Guid? userId, Guid? businessId, string? ipAddress, string? userAgent, object? additionalData);
     Task<bool> VerifyLocationAsync(string ipAddress, decimal latitude, decimal longitude, decimal toleranceMeters);
 }
-
-public interface IRateLimitingService
-{
-    Task<bool> IsWithinRateLimitAsync(string key, int maxRequests, TimeSpan timeWindow);
-    Task RecordRequestAsync(string key);
-}

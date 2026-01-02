@@ -5,6 +5,7 @@ using Chanzup.Application.Interfaces;
 using Chanzup.API.Authorization;
 using System.Security.Claims;
 using Swashbuckle.AspNetCore.Annotations;
+using Chanzup.Domain.Entities;
 
 namespace Chanzup.API.Controllers;
 
@@ -161,18 +162,15 @@ public class BusinessController : ControllerBase
 
             // Get unique players count
             var totalPlayers = await _context.QRSessions
-                .Join(_context.Campaigns, qs => qs.CampaignId, c => c.Id, (qs, c) => new { qs, c })
-                .Where(x => x.c.BusinessId == tenantId)
-                .Select(x => x.qs.PlayerId)
+                .Where(qs => qs.BusinessId == tenantId)
+                .Select(qs => qs.PlayerId)
                 .Distinct()
                 .CountAsync();
 
             // Calculate token revenue (simplified)
             var tokenRevenue = await _context.TokenTransactions
-                .Join(_context.QRSessions, tt => tt.PlayerId, qs => qs.PlayerId, (tt, qs) => new { tt, qs })
-                .Join(_context.Campaigns, x => x.qs.CampaignId, c => c.Id, (x, c) => new { x.tt, x.qs, c })
-                .Where(x => x.c.BusinessId == tenantId && x.tt.TransactionType == TransactionType.Purchase)
-                .SumAsync(x => x.tt.Amount);
+                .Where(tt => tt.Type == TransactionType.Purchased)
+                .SumAsync(tt => tt.Amount);
 
             // Calculate redemption rate
             var totalPrizesWon = await _context.PlayerPrizes

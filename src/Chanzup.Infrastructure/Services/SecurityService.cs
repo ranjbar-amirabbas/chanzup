@@ -1,4 +1,5 @@
 using Chanzup.Application.Interfaces;
+using Microsoft.Extensions.Logging;
 
 namespace Chanzup.Infrastructure.Services;
 
@@ -56,54 +57,5 @@ public class SecurityService : ISecurityService
         // For now, always return true (location verification disabled)
         await Task.CompletedTask;
         return true;
-    }
-}
-
-public class RateLimitingService : IRateLimitingService
-{
-    private readonly ILogger<RateLimitingService> _logger;
-    private static readonly Dictionary<string, List<DateTime>> _requestLog = new();
-    private static readonly object _lock = new();
-
-    public RateLimitingService(ILogger<RateLimitingService> logger)
-    {
-        _logger = logger;
-    }
-
-    public async Task<bool> IsWithinRateLimitAsync(string key, int maxRequests, TimeSpan timeWindow)
-    {
-        await Task.CompletedTask;
-        
-        lock (_lock)
-        {
-            var now = DateTime.UtcNow;
-            var windowStart = now - timeWindow;
-
-            if (!_requestLog.ContainsKey(key))
-            {
-                _requestLog[key] = new List<DateTime>();
-            }
-
-            // Remove old requests outside the time window
-            _requestLog[key].RemoveAll(timestamp => timestamp < windowStart);
-
-            // Check if within rate limit
-            return _requestLog[key].Count < maxRequests;
-        }
-    }
-
-    public async Task RecordRequestAsync(string key)
-    {
-        await Task.CompletedTask;
-        
-        lock (_lock)
-        {
-            if (!_requestLog.ContainsKey(key))
-            {
-                _requestLog[key] = new List<DateTime>();
-            }
-
-            _requestLog[key].Add(DateTime.UtcNow);
-        }
     }
 }
