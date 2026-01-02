@@ -150,7 +150,7 @@ setup_database_and_seed() {
     cd src/Chanzup.API
     
     # Run database migrations
-    dotnet ef database update --configuration Debug
+    ASPNETCORE_ENVIRONMENT=Local dotnet ef database update --configuration Debug
     
     # Seed demo data
     dotnet run --environment Local --seed-demo &
