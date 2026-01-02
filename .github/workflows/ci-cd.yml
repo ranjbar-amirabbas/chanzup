@@ -1,0 +1,237 @@
+name: CI/CD Pipeline
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main ]
+
+env:
+  DOTNET_VERSION: '9.0.x'
+  NODE_VERSION: '18.x'
+  REGISTRY: ghcr.io
+  IMAGE_NAME: chanzup/platform-api
+
+jobs:
+  test-backend:
+    runs-on: ubuntu-latest
+    
+    services:
+      sqlserver:
+        image: mcr.microsoft.com/mssql/server:2022-latest
+        env:
+          SA_PASSWORD: TestPassword123!
+          ACCEPT_EULA: Y
+        ports:
+          - 1433:1433
+        options: >-
+          --health-cmd "/opt/mssql-tools/bin/sqlcmd -S localhost -U sa -P TestPassword123! -Q 'SELECT 1'"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: ${{ env.DOTNET_VERSION }}
+    
+    - name: Restore dependencies
+      run: dotnet restore src/Chanzup.sln
+    
+    - name: Build
+      run: dotnet build src/Chanzup.sln --no-restore --configuration Release
+    
+    - name: Run unit tests
+      run: dotnet test src/Chanzup.Tests/Chanzup.Tests.csproj --no-build --configuration Release --logger trx --collect:"XPlat Code Coverage"
+      env:
+        ConnectionStrings__DefaultConnection: "Server=localhost,1433;Database=ChanzupTestDb;User Id=sa;Password=TestPassword123!;TrustServerCertificate=true"
+    
+    - name: Upload test results
+      uses: actions/upload-artifact@v4
+      if: always()
+      with:
+        name: test-results-backend
+        path: |
+          **/*.trx
+          **/coverage.cobertura.xml
+
+  test-frontend:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        app: [client-app, backoffice-app]
+    
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: ${{ env.NODE_VERSION }}
+        cache: 'npm'
+        cache-dependency-path: ${{ matrix.app }}/package-lock.json
+    
+    - name: Install dependencies
+      run: npm ci
+      working-directory: ${{ matrix.app }}
+    
+    - name: Run tests
+      run: npm test -- --coverage --watchAll=false
+      working-directory: ${{ matrix.app }}
+    
+    - name: Upload test results
+      uses: actions/upload-artifact@v4
+      if: always()
+      with:
+        name: test-results-${{ matrix.app }}
+        path: ${{ matrix.app }}/coverage/
+
+  security-scan:
+    runs-on: ubuntu-latest
+    needs: [test-backend, test-frontend]
+    
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Run Trivy vulnerability scanner
+      uses: aquasecurity/trivy-action@master
+      with:
+        scan-type: 'fs'
+        scan-ref: '.'
+        format: 'sarif'
+        output: 'trivy-results.sarif'
+    
+    - name: Upload Trivy scan results
+      uses: github/codeql-action/upload-sarif@v3
+      with:
+        sarif_file: 'trivy-results.sarif'
+
+  build-and-push:
+    runs-on: ubuntu-latest
+    needs: [test-backend, test-frontend, security-scan]
+    if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/develop'
+    
+    permissions:
+      contents: read
+      packages: write
+    
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Log in to Container Registry
+      uses: docker/login-action@v3
+      with:
+        registry: ${{ env.REGISTRY }}
+        username: ${{ github.actor }}
+        password: ${{ secrets.GITHUB_TOKEN }}
+    
+    - name: Extract metadata
+      id: meta
+      uses: docker/metadata-action@v5
+      with:
+        images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
+        tags: |
+          type=ref,event=branch
+          type=ref,event=pr
+          type=sha,prefix={{branch}}-
+          type=raw,value=latest,enable={{is_default_branch}}
+    
+    - name: Build and push Docker image
+      uses: docker/build-push-action@v5
+      with:
+        context: .
+        push: true
+        tags: ${{ steps.meta.outputs.tags }}
+        labels: ${{ steps.meta.outputs.labels }}
+        build-args: |
+          BUILD_VERSION=${{ github.sha }}
+
+  build-frontend:
+    runs-on: ubuntu-latest
+    needs: [test-frontend]
+    if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/develop'
+    strategy:
+      matrix:
+        app: [client-app, backoffice-app]
+    
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: ${{ env.NODE_VERSION }}
+        cache: 'npm'
+        cache-dependency-path: ${{ matrix.app }}/package-lock.json
+    
+    - name: Install dependencies
+      run: npm ci
+      working-directory: ${{ matrix.app }}
+    
+    - name: Build for staging
+      if: github.ref == 'refs/heads/develop'
+      run: npm run build
+      working-directory: ${{ matrix.app }}
+      env:
+        NODE_ENV: staging
+    
+    - name: Build for production
+      if: github.ref == 'refs/heads/main'
+      run: npm run build
+      working-directory: ${{ matrix.app }}
+      env:
+        NODE_ENV: production
+    
+    - name: Upload build artifacts
+      uses: actions/upload-artifact@v4
+      with:
+        name: ${{ matrix.app }}-build
+        path: ${{ matrix.app }}/build/
+
+  deploy-staging:
+    runs-on: ubuntu-latest
+    needs: [build-and-push, build-frontend]
+    if: github.ref == 'refs/heads/develop'
+    environment: staging
+    
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Deploy to staging
+      run: |
+        echo "Deploying to staging environment..."
+        # Add actual deployment commands here
+        # This could be kubectl, docker-compose, or cloud provider CLI commands
+    
+    - name: Run smoke tests
+      run: |
+        echo "Running smoke tests against staging..."
+        # Add smoke test commands here
+
+  deploy-production:
+    runs-on: ubuntu-latest
+    needs: [build-and-push, build-frontend]
+    if: github.ref == 'refs/heads/main'
+    environment: production
+    
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Deploy to production
+      run: |
+        echo "Deploying to production environment..."
+        # Add actual deployment commands here
+    
+    - name: Run smoke tests
+      run: |
+        echo "Running smoke tests against production..."
+        # Add smoke test commands here
+    
+    - name: Notify deployment
+      if: always()
+      run: |
+        echo "Sending deployment notification..."
+        # Add notification logic (Slack, email, etc.)

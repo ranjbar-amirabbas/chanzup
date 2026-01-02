@@ -1,0 +1,60 @@
+# Multi-stage Dockerfile for local development
+
+# Base stage for .NET API
+FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS base
+WORKDIR /app
+EXPOSE 5001
+EXPOSE 7001
+
+# Build stage for .NET API
+FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
+WORKDIR /src
+
+# Copy csproj files and restore dependencies
+COPY ["src/Chanzup.API/Chanzup.API.csproj", "Chanzup.API/"]
+COPY ["src/Chanzup.Application/Chanzup.Application.csproj", "Chanzup.Application/"]
+COPY ["src/Chanzup.Domain/Chanzup.Domain.csproj", "Chanzup.Domain/"]
+COPY ["src/Chanzup.Infrastructure/Chanzup.Infrastructure.csproj", "Chanzup.Infrastructure/"]
+
+RUN dotnet restore "Chanzup.API/Chanzup.API.csproj"
+
+# Copy source code
+COPY src/ .
+
+# Build the application
+RUN dotnet build "Chanzup.API/Chanzup.API.csproj" -c Debug -o /app/build
+
+# Publish stage for API
+FROM build AS publish
+RUN dotnet publish "Chanzup.API/Chanzup.API.csproj" -c Debug -o /app/publish
+
+# Final API stage
+FROM base AS api
+WORKDIR /app
+COPY --from=publish /app/publish .
+
+# Install development certificates
+RUN dotnet dev-certs https --clean
+RUN dotnet dev-certs https --trust
+
+ENTRYPOINT ["dotnet", "Chanzup.API.dll"]
+
+# Node.js base for React apps
+FROM node:18-alpine AS node-base
+WORKDIR /app
+
+# Back Office App stage
+FROM node-base AS backoffice-app
+COPY backoffice-app/package*.json ./
+RUN npm ci
+COPY backoffice-app/ .
+EXPOSE 3000
+CMD ["npm", "start"]
+
+# Client App stage
+FROM node-base AS client-app
+COPY client-app/package*.json ./
+RUN npm ci
+COPY client-app/ .
+EXPOSE 3000
+CMD ["npm", "start"]

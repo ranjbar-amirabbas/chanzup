@@ -1,0 +1,113 @@
+version: '3.8'
+
+services:
+  # SQL Server for local development
+  sqlserver:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    container_name: chanzup-sqlserver-local
+    environment:
+      - ACCEPT_EULA=Y
+      - SA_PASSWORD=ChanzupLocal123!
+      - MSSQL_PID=Developer
+    ports:
+      - "1433:1433"
+    volumes:
+      - sqlserver_data:/var/opt/mssql
+    networks:
+      - chanzup-network
+    restart: unless-stopped
+
+  # Redis for caching (optional)
+  redis:
+    image: redis:7-alpine
+    container_name: chanzup-redis-local
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    networks:
+      - chanzup-network
+    restart: unless-stopped
+    command: redis-server --appendonly yes
+
+  # Chanzup API
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+      target: api
+    container_name: chanzup-api-local
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Local
+      - ASPNETCORE_URLS=https://+:7001;http://+:5001
+      - ASPNETCORE_Kestrel__Certificates__Default__Password=ChanzupLocal123!
+      - ASPNETCORE_Kestrel__Certificates__Default__Path=/https/aspnetapp.pfx
+      - ConnectionStrings__DefaultConnection=Server=sqlserver,1433;Database=ChanzupLocal;User Id=sa;Password=ChanzupLocal123!;TrustServerCertificate=true;MultipleActiveResultSets=true
+      - ConnectionStrings__RedisConnection=redis:6379
+    ports:
+      - "5001:5001"
+      - "7001:7001"
+    volumes:
+      - ~/.aspnet/https:/https:ro
+      - ./src:/app/src
+      - ./scripts:/app/scripts
+    depends_on:
+      - sqlserver
+      - redis
+    networks:
+      - chanzup-network
+    restart: unless-stopped
+
+  # Back Office React App
+  backoffice-app:
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+      target: backoffice-app
+    container_name: chanzup-backoffice-local
+    environment:
+      - REACT_APP_API_BASE_URL=https://localhost:7001
+      - REACT_APP_ENVIRONMENT=development
+      - CHOKIDAR_USEPOLLING=true
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./backoffice-app:/app
+      - /app/node_modules
+    depends_on:
+      - api
+    networks:
+      - chanzup-network
+    restart: unless-stopped
+
+  # Client React App
+  client-app:
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+      target: client-app
+    container_name: chanzup-client-local
+    environment:
+      - REACT_APP_API_BASE_URL=https://localhost:7001
+      - REACT_APP_ENVIRONMENT=development
+      - CHOKIDAR_USEPOLLING=true
+    ports:
+      - "3001:3000"
+    volumes:
+      - ./client-app:/app
+      - /app/node_modules
+    depends_on:
+      - api
+    networks:
+      - chanzup-network
+    restart: unless-stopped
+
+volumes:
+  sqlserver_data:
+    driver: local
+  redis_data:
+    driver: local
+
+networks:
+  chanzup-network:
+    driver: bridge
