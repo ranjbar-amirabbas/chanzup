@@ -126,7 +126,7 @@ const CampaignCreationWizard: React.FC<Props> = ({ onClose, onCampaignCreated })
 
     try {
       // TODO: Replace with actual API call
-      const response = await axios.post('https://localhost:7000/api/campaigns', campaignData);
+      const response = await axios.post('https://localhost:8106/api/campaigns', campaignData);
       
       onCampaignCreated();
       onClose();

@@ -294,7 +294,7 @@ public class ApplicationDbContext : DbContext, IApplicationDbContext
             entity.HasOne(e => e.Campaign)
                 .WithMany(e => e.WheelSpins)
                 .HasForeignKey(e => e.CampaignId)
-                .OnDelete(DeleteBehavior.Cascade);
+                .OnDelete(DeleteBehavior.NoAction);
                 
             entity.HasOne(e => e.Prize)
                 .WithMany(e => e.WheelSpins)
@@ -485,7 +485,7 @@ public class ApplicationDbContext : DbContext, IApplicationDbContext
             entity.HasOne(e => e.Location)
                 .WithMany()
                 .HasForeignKey(e => e.LocationId)
-                .OnDelete(DeleteBehavior.Cascade);
+                .OnDelete(DeleteBehavior.NoAction);
                 
             entity.HasIndex(e => e.CampaignId);
             entity.HasIndex(e => e.LocationId);
@@ -506,7 +506,7 @@ public class ApplicationDbContext : DbContext, IApplicationDbContext
             entity.HasOne(e => e.Location)
                 .WithMany()
                 .HasForeignKey(e => e.LocationId)
-                .OnDelete(DeleteBehavior.Cascade);
+                .OnDelete(DeleteBehavior.NoAction);
                 
             entity.HasIndex(e => e.PrizeId);
             entity.HasIndex(e => e.LocationId);
@@ -528,7 +528,7 @@ public class ApplicationDbContext : DbContext, IApplicationDbContext
             entity.HasOne(e => e.Location)
                 .WithMany()
                 .HasForeignKey(e => e.LocationId)
-                .OnDelete(DeleteBehavior.Cascade);
+                .OnDelete(DeleteBehavior.NoAction);
                 
             entity.HasIndex(e => e.StaffId);
             entity.HasIndex(e => e.LocationId);

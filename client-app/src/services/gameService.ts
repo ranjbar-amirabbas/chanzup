@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { Location } from './locationService';
 
-const API_BASE_URL = 'https://localhost:7000/api';
+const API_BASE_URL = 'https://localhost:8106/api';
 
 export interface QRScanRequest {
   qrCode: string;

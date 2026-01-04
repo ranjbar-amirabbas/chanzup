@@ -96,7 +96,7 @@ const Register: React.FC = () => {
         description: formData.description
       };
 
-      const response = await axios.post('https://localhost:7000/api/auth/register/business', registrationData);
+      const response = await axios.post('https://localhost:8106/api/auth/register/business', registrationData);
       
       // Store token and business info
       localStorage.setItem('token', response.data.accessToken);

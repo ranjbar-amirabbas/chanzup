@@ -15,16 +15,16 @@ namespace Chanzup.Infrastructure.Migrations
                 name: "Admins",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "TEXT", nullable: false),
-                    Email = table.Column<string>(type: "TEXT", maxLength: 255, nullable: false),
-                    PasswordHash = table.Column<string>(type: "TEXT", maxLength: 255, nullable: false),
-                    FirstName = table.Column<string>(type: "TEXT", maxLength: 100, nullable: false),
-                    LastName = table.Column<string>(type: "TEXT", maxLength: 100, nullable: false),
-                    Role = table.Column<int>(type: "INTEGER", nullable: false),
-                    IsActive = table.Column<bool>(type: "INTEGER", nullable: false),
-                    CreatedAt = table.Column<DateTime>(type: "TEXT", nullable: false),
-                    UpdatedAt = table.Column<DateTime>(type: "TEXT", nullable: false),
-                    CreatedBy = table.Column<Guid>(type: "TEXT", nullable: true)
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Email = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: false),
+                    PasswordHash = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: false),
+                    FirstName = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
+                    LastName = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
+                    Role = table.Column<int>(type: "int", nullable: false),
+                    IsActive = table.Column<bool>(type: "bit", nullable: false),
+                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    CreatedBy = table.Column<Guid>(type: "uniqueidentifier", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -35,17 +35,17 @@ namespace Chanzup.Infrastructure.Migrations
                 name: "Businesses",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "TEXT", nullable: false),
-                    Name = table.Column<string>(type: "TEXT", maxLength: 255, nullable: false),
-                    Email = table.Column<string>(type: "TEXT", maxLength: 255, nullable: false),
-                    Phone = table.Column<string>(type: "TEXT", maxLength: 50, nullable: true),
-                    Address = table.Column<string>(type: "TEXT", maxLength: 500, nullable: true),
-                    Latitude = table.Column<decimal>(type: "TEXT", precision: 10, scale: 8, nullable: true),
-                    Longitude = table.Column<decimal>(type: "TEXT", precision: 11, scale: 8, nullable: true),
-                    SubscriptionTier = table.Column<int>(type: "INTEGER", nullable: false),
-                    IsActive = table.Column<bool>(type: "INTEGER", nullable: false),
-                    CreatedAt = table.Column<DateTime>(type: "TEXT", nullable: false),
-                    UpdatedAt = table.Column<DateTime>(type: "TEXT", nullable: false)
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: false),
+                    Email = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: false),
+                    Phone = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: true),
+                    Address = table.Column<string>(type: "nvarchar(500)", maxLength: 500, nullable: true),
+                    Latitude = table.Column<decimal>(type: "decimal(10,8)", precision: 10, scale: 8, nullable: true),
+                    Longitude = table.Column<decimal>(type: "decimal(11,8)", precision: 11, scale: 8, nullable: true),
+                    SubscriptionTier = table.Column<int>(type: "int", nullable: false),
+                    IsActive = table.Column<bool>(type: "bit", nullable: false),
+                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -56,16 +56,16 @@ namespace Chanzup.Infrastructure.Migrations
                 name: "Players",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "TEXT", nullable: false),
-                    Email = table.Column<string>(type: "TEXT", maxLength: 255, nullable: false),
-                    PasswordHash = table.Column<string>(type: "TEXT", maxLength: 255, nullable: false),
-                    FirstName = table.Column<string>(type: "TEXT", maxLength: 100, nullable: true),
-                    LastName = table.Column<string>(type: "TEXT", maxLength: 100, nullable: true),
-                    Phone = table.Column<string>(type: "TEXT", maxLength: 50, nullable: true),
-                    TokenBalance = table.Column<int>(type: "INTEGER", nullable: false),
-                    IsActive = table.Column<bool>(type: "INTEGER", nullable: false),
-                    CreatedAt = table.Column<DateTime>(type: "TEXT", nullable: false),
-                    UpdatedAt = table.Column<DateTime>(type: "TEXT", nullable: false)
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Email = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: false),
+                    PasswordHash = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: false),
+                    FirstName = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: true),
+                    LastName = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: true),
+                    Phone = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: true),
+                    TokenBalance = table.Column<int>(type: "int", nullable: false),
+                    IsActive = table.Column<bool>(type: "bit", nullable: false),
+                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -76,16 +76,16 @@ namespace Chanzup.Infrastructure.Migrations
                 name: "RefreshTokens",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "TEXT", nullable: false),
-                    Token = table.Column<string>(type: "TEXT", maxLength: 255, nullable: false),
-                    UserId = table.Column<Guid>(type: "TEXT", nullable: false),
-                    UserType = table.Column<string>(type: "TEXT", maxLength: 50, nullable: false),
-                    ExpiresAt = table.Column<DateTime>(type: "TEXT", nullable: false),
-                    IsRevoked = table.Column<bool>(type: "INTEGER", nullable: false),
-                    CreatedAt = table.Column<DateTime>(type: "TEXT", nullable: false),
-                    RevokedAt = table.Column<DateTime>(type: "TEXT", nullable: true),
-                    RevokedByIp = table.Column<string>(type: "TEXT", maxLength: 50, nullable: true),
-                    ReplacedByToken = table.Column<string>(type: "TEXT", maxLength: 255, nullable: true)
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Token = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: false),
+                    UserId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    UserType = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
+                    ExpiresAt = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    IsRevoked = table.Column<bool>(type: "bit", nullable: false),
+                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    RevokedAt = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    RevokedByIp = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: true),
+                    ReplacedByToken = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: true)
                 },
                 constraints: table =>
                 {
@@ -96,19 +96,19 @@ namespace Chanzup.Infrastructure.Migrations
                 name: "AuditLogs",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "TEXT", nullable: false),
-                    Action = table.Column<string>(type: "TEXT", maxLength: 100, nullable: false),
-                    EntityType = table.Column<string>(type: "TEXT", maxLength: 100, nullable: false),
-                    EntityId = table.Column<Guid>(type: "TEXT", nullable: true),
-                    OldValues = table.Column<string>(type: "TEXT", maxLength: 4000, nullable: true),
-                    NewValues = table.Column<string>(type: "TEXT", maxLength: 4000, nullable: true),
-                    UserId = table.Column<Guid>(type: "TEXT", nullable: true),
-                    UserType = table.Column<string>(type: "TEXT", maxLength: 50, nullable: false),
-                    UserEmail = table.Column<string>(type: "TEXT", maxLength: 255, nullable: true),
-                    IpAddress = table.Column<string>(type: "TEXT", maxLength: 50, nullable: true),
-                    UserAgent = table.Column<string>(type: "TEXT", maxLength: 500, nullable: true),
-                    CreatedAt = table.Column<DateTime>(type: "TEXT", nullable: false),
-                    AdditionalData = table.Column<string>(type: "TEXT", maxLength: 2000, nullable: true)
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Action = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
+                    EntityType = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
+                    EntityId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    OldValues = table.Column<string>(type: "nvarchar(4000)", maxLength: 4000, nullable: true),
+                    NewValues = table.Column<string>(type: "nvarchar(4000)", maxLength: 4000, nullable: true),
+                    UserId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    UserType = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
+                    UserEmail = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: true),
+                    IpAddress = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: true),
+                    UserAgent = table.Column<string>(type: "nvarchar(500)", maxLength: 500, nullable: true),
+                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    AdditionalData = table.Column<string>(type: "nvarchar(2000)", maxLength: 2000, nullable: true)
                 },
                 constraints: table =>
                 {
@@ -125,23 +125,23 @@ namespace Chanzup.Infrastructure.Migrations
                 name: "DisputeResolutions",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "TEXT", nullable: false),
-                    Title = table.Column<string>(type: "TEXT", maxLength: 255, nullable: false),
-                    Description = table.Column<string>(type: "TEXT", maxLength: 2000, nullable: false),
-                    Type = table.Column<int>(type: "INTEGER", nullable: false),
-                    Status = table.Column<int>(type: "INTEGER", nullable: false),
-                    Priority = table.Column<int>(type: "INTEGER", nullable: false),
-                    ReporterId = table.Column<Guid>(type: "TEXT", nullable: true),
-                    ReporterType = table.Column<string>(type: "TEXT", maxLength: 50, nullable: false),
-                    ReporterEmail = table.Column<string>(type: "TEXT", maxLength: 255, nullable: true),
-                    SubjectId = table.Column<Guid>(type: "TEXT", nullable: true),
-                    SubjectType = table.Column<string>(type: "TEXT", maxLength: 100, nullable: true),
-                    AssignedTo = table.Column<Guid>(type: "TEXT", nullable: true),
-                    CreatedAt = table.Column<DateTime>(type: "TEXT", nullable: false),
-                    AssignedAt = table.Column<DateTime>(type: "TEXT", nullable: true),
-                    ResolvedAt = table.Column<DateTime>(type: "TEXT", nullable: true),
-                    Resolution = table.Column<string>(type: "TEXT", maxLength: 2000, nullable: true),
-                    AdminNotes = table.Column<string>(type: "TEXT", maxLength: 1000, nullable: true)
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Title = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: false),
+                    Description = table.Column<string>(type: "nvarchar(2000)", maxLength: 2000, nullable: false),
+                    Type = table.Column<int>(type: "int", nullable: false),
+                    Status = table.Column<int>(type: "int", nullable: false),
+                    Priority = table.Column<int>(type: "int", nullable: false),
+                    ReporterId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    ReporterType = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
+                    ReporterEmail = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: true),
+                    SubjectId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    SubjectType = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: true),
+                    AssignedTo = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    AssignedAt = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    ResolvedAt = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    Resolution = table.Column<string>(type: "nvarchar(2000)", maxLength: 2000, nullable: true),
+                    AdminNotes = table.Column<string>(type: "nvarchar(1000)", maxLength: 1000, nullable: true)
                 },
                 constraints: table =>
                 {
@@ -158,24 +158,24 @@ namespace Chanzup.Infrastructure.Migrations
                 name: "SuspiciousActivities",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "TEXT", nullable: false),
-                    ActivityType = table.Column<string>(type: "TEXT", maxLength: 100, nullable: false),
-                    Description = table.Column<string>(type: "TEXT", maxLength: 1000, nullable: false),
-                    Severity = table.Column<int>(type: "INTEGER", nullable: false),
-                    Status = table.Column<int>(type: "INTEGER", nullable: false),
-                    UserId = table.Column<Guid>(type: "TEXT", nullable: true),
-                    UserType = table.Column<string>(type: "TEXT", maxLength: 50, nullable: true),
-                    UserEmail = table.Column<string>(type: "TEXT", maxLength: 255, nullable: true),
-                    IpAddress = table.Column<string>(type: "TEXT", maxLength: 50, nullable: true),
-                    UserAgent = table.Column<string>(type: "TEXT", maxLength: 500, nullable: true),
-                    Location = table.Column<string>(type: "TEXT", maxLength: 200, nullable: true),
-                    ActivityData = table.Column<string>(type: "TEXT", nullable: false),
-                    RiskScore = table.Column<decimal>(type: "TEXT", precision: 5, scale: 2, nullable: false),
-                    DetectedAt = table.Column<DateTime>(type: "TEXT", nullable: false),
-                    ReviewedAt = table.Column<DateTime>(type: "TEXT", nullable: true),
-                    ReviewedBy = table.Column<Guid>(type: "TEXT", nullable: true),
-                    ReviewNotes = table.Column<string>(type: "TEXT", maxLength: 1000, nullable: true),
-                    ActionTaken = table.Column<string>(type: "TEXT", maxLength: 500, nullable: true)
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    ActivityType = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
+                    Description = table.Column<string>(type: "nvarchar(1000)", maxLength: 1000, nullable: false),
+                    Severity = table.Column<int>(type: "int", nullable: false),
+                    Status = table.Column<int>(type: "int", nullable: false),
+                    UserId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    UserType = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: true),
+                    UserEmail = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: true),
+                    IpAddress = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: true),
+                    UserAgent = table.Column<string>(type: "nvarchar(500)", maxLength: 500, nullable: true),
+                    Location = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: true),
+                    ActivityData = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    RiskScore = table.Column<decimal>(type: "decimal(5,2)", precision: 5, scale: 2, nullable: false),
+                    DetectedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    ReviewedAt = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    ReviewedBy = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    ReviewNotes = table.Column<string>(type: "nvarchar(1000)", maxLength: 1000, nullable: true),
+                    ActionTaken = table.Column<string>(type: "nvarchar(500)", maxLength: 500, nullable: true)
                 },
                 constraints: table =>
                 {
@@ -192,16 +192,16 @@ namespace Chanzup.Infrastructure.Migrations
                 name: "SystemParameters",
                 columns: table => new
                 {
-                    Key = table.Column<string>(type: "TEXT", maxLength: 100, nullable: false),
-                    Value = table.Column<string>(type: "TEXT", maxLength: 2000, nullable: false),
-                    Description = table.Column<string>(type: "TEXT", maxLength: 500, nullable: false),
-                    Category = table.Column<string>(type: "TEXT", maxLength: 100, nullable: false),
-                    Type = table.Column<int>(type: "INTEGER", nullable: false),
-                    ValidationRule = table.Column<string>(type: "TEXT", maxLength: 500, nullable: true),
-                    IsReadOnly = table.Column<bool>(type: "INTEGER", nullable: false),
-                    CreatedAt = table.Column<DateTime>(type: "TEXT", nullable: false),
-                    UpdatedAt = table.Column<DateTime>(type: "TEXT", nullable: false),
-                    UpdatedBy = table.Column<Guid>(type: "TEXT", nullable: true)
+                    Key = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
+                    Value = table.Column<string>(type: "nvarchar(2000)", maxLength: 2000, nullable: false),
+                    Description = table.Column<string>(type: "nvarchar(500)", maxLength: 500, nullable: false),
+                    Category = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
+                    Type = table.Column<int>(type: "int", nullable: false),
+                    ValidationRule = table.Column<string>(type: "nvarchar(500)", maxLength: 500, nullable: true),
+                    IsReadOnly = table.Column<bool>(type: "bit", nullable: false),
+                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    UpdatedBy = table.Column<Guid>(type: "uniqueidentifier", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -218,25 +218,25 @@ namespace Chanzup.Infrastructure.Migrations
                 name: "BusinessApplications",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "TEXT", nullable: false),
-                    BusinessName = table.Column<string>(type: "TEXT", maxLength: 255, nullable: false),
-                    Email = table.Column<string>(type: "TEXT", maxLength: 255, nullable: false),
-                    Phone = table.Column<string>(type: "TEXT", maxLength: 50, nullable: true),
-                    Address = table.Column<string>(type: "TEXT", maxLength: 500, nullable: true),
-                    Latitude = table.Column<decimal>(type: "TEXT", precision: 10, scale: 8, nullable: true),
-                    Longitude = table.Column<decimal>(type: "TEXT", precision: 11, scale: 8, nullable: true),
-                    RequestedTier = table.Column<int>(type: "INTEGER", nullable: false),
-                    Status = table.Column<int>(type: "INTEGER", nullable: false),
-                    BusinessDescription = table.Column<string>(type: "TEXT", maxLength: 2000, nullable: true),
-                    BusinessCategory = table.Column<string>(type: "TEXT", maxLength: 100, nullable: true),
-                    Website = table.Column<string>(type: "TEXT", maxLength: 500, nullable: true),
-                    SocialMediaLinks = table.Column<string>(type: "TEXT", maxLength: 1000, nullable: true),
-                    SubmittedAt = table.Column<DateTime>(type: "TEXT", nullable: false),
-                    ReviewedAt = table.Column<DateTime>(type: "TEXT", nullable: true),
-                    ReviewedBy = table.Column<Guid>(type: "TEXT", nullable: true),
-                    ReviewNotes = table.Column<string>(type: "TEXT", maxLength: 1000, nullable: true),
-                    RejectionReason = table.Column<string>(type: "TEXT", maxLength: 500, nullable: true),
-                    BusinessId = table.Column<Guid>(type: "TEXT", nullable: true)
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    BusinessName = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: false),
+                    Email = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: false),
+                    Phone = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: true),
+                    Address = table.Column<string>(type: "nvarchar(500)", maxLength: 500, nullable: true),
+                    Latitude = table.Column<decimal>(type: "decimal(10,8)", precision: 10, scale: 8, nullable: true),
+                    Longitude = table.Column<decimal>(type: "decimal(11,8)", precision: 11, scale: 8, nullable: true),
+                    RequestedTier = table.Column<int>(type: "int", nullable: false),
+                    Status = table.Column<int>(type: "int", nullable: false),
+                    BusinessDescription = table.Column<string>(type: "nvarchar(2000)", maxLength: 2000, nullable: true),
+                    BusinessCategory = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: true),
+                    Website = table.Column<string>(type: "nvarchar(500)", maxLength: 500, nullable: true),
+                    SocialMediaLinks = table.Column<string>(type: "nvarchar(1000)", maxLength: 1000, nullable: true),
+                    SubmittedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    ReviewedAt = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    ReviewedBy = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    ReviewNotes = table.Column<string>(type: "nvarchar(1000)", maxLength: 1000, nullable: true),
+                    RejectionReason = table.Column<string>(type: "nvarchar(500)", maxLength: 500, nullable: true),
+                    BusinessId = table.Column<Guid>(type: "uniqueidentifier", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -259,16 +259,16 @@ namespace Chanzup.Infrastructure.Migrations
                 name: "BusinessLocations",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "TEXT", nullable: false),
-                    BusinessId = table.Column<Guid>(type: "TEXT", nullable: false),
-                    Name = table.Column<string>(type: "TEXT", maxLength: 255, nullable: false),
-                    Address = table.Column<string>(type: "TEXT", maxLength: 500, nullable: false),
-                    Latitude = table.Column<decimal>(type: "TEXT", precision: 10, scale: 8, nullable: false),
-                    Longitude = table.Column<decimal>(type: "TEXT", precision: 11, scale: 8, nullable: false),
-                    QRCode = table.Column<string>(type: "TEXT", maxLength: 255, nullable: false),
-                    IsActive = table.Column<bool>(type: "INTEGER", nullable: false),
-                    CreatedAt = table.Column<DateTime>(type: "TEXT", nullable: false),
-                    UpdatedAt = table.Column<DateTime>(type: "TEXT", nullable: false)
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    BusinessId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: false),
+                    Address = table.Column<string>(type: "nvarchar(500)", maxLength: 500, nullable: false),
+                    Latitude = table.Column<decimal>(type: "decimal(10,8)", precision: 10, scale: 8, nullable: false),
+                    Longitude = table.Column<decimal>(type: "decimal(11,8)", precision: 11, scale: 8, nullable: false),
+                    QRCode = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: false),
+                    IsActive = table.Column<bool>(type: "bit", nullable: false),
+                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -285,19 +285,19 @@ namespace Chanzup.Infrastructure.Migrations
                 name: "Campaigns",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "TEXT", nullable: false),
-                    BusinessId = table.Column<Guid>(type: "TEXT", nullable: false),
-                    Name = table.Column<string>(type: "TEXT", maxLength: 255, nullable: false),
-                    Description = table.Column<string>(type: "TEXT", maxLength: 1000, nullable: true),
-                    GameType = table.Column<int>(type: "INTEGER", nullable: false),
-                    TokenCostPerSpin = table.Column<int>(type: "INTEGER", nullable: false),
-                    MaxSpinsPerDay = table.Column<int>(type: "INTEGER", nullable: false),
-                    IsActive = table.Column<bool>(type: "INTEGER", nullable: false),
-                    StartDate = table.Column<DateTime>(type: "TEXT", nullable: false),
-                    EndDate = table.Column<DateTime>(type: "TEXT", nullable: true),
-                    Targeting = table.Column<int>(type: "INTEGER", nullable: false),
-                    CreatedAt = table.Column<DateTime>(type: "TEXT", nullable: false),
-                    UpdatedAt = table.Column<DateTime>(type: "TEXT", nullable: false)
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    BusinessId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: false),
+                    Description = table.Column<string>(type: "nvarchar(1000)", maxLength: 1000, nullable: true),
+                    GameType = table.Column<int>(type: "int", nullable: false),
+                    TokenCostPerSpin = table.Column<int>(type: "int", nullable: false),
+                    MaxSpinsPerDay = table.Column<int>(type: "int", nullable: false),
+                    IsActive = table.Column<bool>(type: "bit", nullable: false),
+                    StartDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    EndDate = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    Targeting = table.Column<int>(type: "int", nullable: false),
+                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -314,17 +314,17 @@ namespace Chanzup.Infrastructure.Migrations
                 name: "Staff",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "TEXT", nullable: false),
-                    BusinessId = table.Column<Guid>(type: "TEXT", nullable: false),
-                    Email = table.Column<string>(type: "TEXT", maxLength: 255, nullable: false),
-                    PasswordHash = table.Column<string>(type: "TEXT", maxLength: 255, nullable: false),
-                    FirstName = table.Column<string>(type: "TEXT", maxLength: 100, nullable: false),
-                    LastName = table.Column<string>(type: "TEXT", maxLength: 100, nullable: false),
-                    Role = table.Column<int>(type: "INTEGER", nullable: false),
-                    AccessLevel = table.Column<int>(type: "INTEGER", nullable: false),
-                    IsActive = table.Column<bool>(type: "INTEGER", nullable: false),
-                    CreatedAt = table.Column<DateTime>(type: "TEXT", nullable: false),
-                    UpdatedAt = table.Column<DateTime>(type: "TEXT", nullable: false)
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    BusinessId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Email = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: false),
+                    PasswordHash = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: false),
+                    FirstName = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
+                    LastName = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
+                    Role = table.Column<int>(type: "int", nullable: false),
+                    AccessLevel = table.Column<int>(type: "int", nullable: false),
+                    IsActive = table.Column<bool>(type: "bit", nullable: false),
+                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -341,14 +341,14 @@ namespace Chanzup.Infrastructure.Migrations
                 name: "QRSessions",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "TEXT", nullable: false),
-                    PlayerId = table.Column<Guid>(type: "TEXT", nullable: false),
-                    BusinessId = table.Column<Guid>(type: "TEXT", nullable: false),
-                    PlayerLatitude = table.Column<decimal>(type: "TEXT", precision: 10, scale: 8, nullable: true),
-                    PlayerLongitude = table.Column<decimal>(type: "TEXT", precision: 11, scale: 8, nullable: true),
-                    TokensEarned = table.Column<int>(type: "INTEGER", nullable: false),
-                    SessionHash = table.Column<string>(type: "TEXT", maxLength: 255, nullable: false),
-                    CreatedAt = table.Column<DateTime>(type: "TEXT", nullable: false)
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    PlayerId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    BusinessId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    PlayerLatitude = table.Column<decimal>(type: "decimal(10,8)", precision: 10, scale: 8, nullable: true),
+                    PlayerLongitude = table.Column<decimal>(type: "decimal(11,8)", precision: 11, scale: 8, nullable: true),
+                    TokensEarned = table.Column<int>(type: "int", nullable: false),
+                    SessionHash = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: false),
+                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -371,14 +371,14 @@ namespace Chanzup.Infrastructure.Migrations
                 name: "Referrals",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "TEXT", nullable: false),
-                    ReferrerId = table.Column<Guid>(type: "TEXT", nullable: false),
-                    ReferredPlayerId = table.Column<Guid>(type: "TEXT", nullable: false),
-                    ReferralCode = table.Column<string>(type: "TEXT", maxLength: 20, nullable: false),
-                    TokensAwarded = table.Column<int>(type: "INTEGER", nullable: false),
-                    IsCompleted = table.Column<bool>(type: "INTEGER", nullable: false),
-                    CreatedAt = table.Column<DateTime>(type: "TEXT", nullable: false),
-                    CompletedAt = table.Column<DateTime>(type: "TEXT", nullable: true)
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    ReferrerId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    ReferredPlayerId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    ReferralCode = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: false),
+                    TokensAwarded = table.Column<int>(type: "int", nullable: false),
+                    IsCompleted = table.Column<bool>(type: "bit", nullable: false),
+                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    CompletedAt = table.Column<DateTime>(type: "datetime2", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -401,15 +401,15 @@ namespace Chanzup.Infrastructure.Migrations
                 name: "SocialShares",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "TEXT", nullable: false),
-                    PlayerId = table.Column<Guid>(type: "TEXT", nullable: false),
-                    Platform = table.Column<int>(type: "INTEGER", nullable: false),
-                    Content = table.Column<string>(type: "TEXT", maxLength: 1000, nullable: false),
-                    ExternalShareId = table.Column<string>(type: "TEXT", maxLength: 255, nullable: true),
-                    TokensAwarded = table.Column<int>(type: "INTEGER", nullable: false),
-                    IsVerified = table.Column<bool>(type: "INTEGER", nullable: false),
-                    CreatedAt = table.Column<DateTime>(type: "TEXT", nullable: false),
-                    VerifiedAt = table.Column<DateTime>(type: "TEXT", nullable: true)
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    PlayerId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Platform = table.Column<int>(type: "int", nullable: false),
+                    Content = table.Column<string>(type: "nvarchar(1000)", maxLength: 1000, nullable: false),
+                    ExternalShareId = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: true),
+                    TokensAwarded = table.Column<int>(type: "int", nullable: false),
+                    IsVerified = table.Column<bool>(type: "bit", nullable: false),
+                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    VerifiedAt = table.Column<DateTime>(type: "datetime2", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -426,13 +426,13 @@ namespace Chanzup.Infrastructure.Migrations
                 name: "TokenTransactions",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "TEXT", nullable: false),
-                    PlayerId = table.Column<Guid>(type: "TEXT", nullable: false),
-                    Type = table.Column<int>(type: "INTEGER", nullable: false),
-                    Amount = table.Column<int>(type: "INTEGER", nullable: false),
-                    Description = table.Column<string>(type: "TEXT", maxLength: 500, nullable: false),
-                    RelatedEntityId = table.Column<Guid>(type: "TEXT", nullable: true),
-                    CreatedAt = table.Column<DateTime>(type: "TEXT", nullable: false)
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    PlayerId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Type = table.Column<int>(type: "int", nullable: false),
+                    Amount = table.Column<int>(type: "int", nullable: false),
+                    Description = table.Column<string>(type: "nvarchar(500)", maxLength: 500, nullable: false),
+                    RelatedEntityId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -449,13 +449,13 @@ namespace Chanzup.Infrastructure.Migrations
                 name: "DisputeMessages",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "TEXT", nullable: false),
-                    DisputeId = table.Column<Guid>(type: "TEXT", nullable: false),
-                    Content = table.Column<string>(type: "TEXT", maxLength: 2000, nullable: false),
-                    SenderId = table.Column<Guid>(type: "TEXT", nullable: false),
-                    SenderType = table.Column<string>(type: "TEXT", maxLength: 50, nullable: false),
-                    CreatedAt = table.Column<DateTime>(type: "TEXT", nullable: false),
-                    IsInternal = table.Column<bool>(type: "INTEGER", nullable: false)
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    DisputeId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Content = table.Column<string>(type: "nvarchar(2000)", maxLength: 2000, nullable: false),
+                    SenderId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    SenderType = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
+                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    IsInternal = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -472,13 +472,13 @@ namespace Chanzup.Infrastructure.Migrations
                 name: "AnalyticsEvents",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "TEXT", nullable: false),
-                    BusinessId = table.Column<Guid>(type: "TEXT", nullable: false),
-                    PlayerId = table.Column<Guid>(type: "TEXT", nullable: true),
-                    CampaignId = table.Column<Guid>(type: "TEXT", nullable: true),
-                    EventType = table.Column<string>(type: "TEXT", maxLength: 50, nullable: false),
-                    EventData = table.Column<string>(type: "TEXT", nullable: false),
-                    CreatedAt = table.Column<DateTime>(type: "TEXT", nullable: false)
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    BusinessId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    PlayerId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    CampaignId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    EventType = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
+                    EventData = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -506,9 +506,9 @@ namespace Chanzup.Infrastructure.Migrations
                 name: "CampaignLocations",
                 columns: table => new
                 {
-                    CampaignId = table.Column<Guid>(type: "TEXT", nullable: false),
-                    LocationId = table.Column<Guid>(type: "TEXT", nullable: false),
-                    CreatedAt = table.Column<DateTime>(type: "TEXT", nullable: false)
+                    CampaignId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    LocationId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -517,8 +517,7 @@ namespace Chanzup.Infrastructure.Migrations
                         name: "FK_CampaignLocations_BusinessLocations_LocationId",
                         column: x => x.LocationId,
                         principalTable: "BusinessLocations",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "Id");
                     table.ForeignKey(
                         name: "FK_CampaignLocations_Campaigns_CampaignId",
                         column: x => x.CampaignId,
@@ -531,19 +530,19 @@ namespace Chanzup.Infrastructure.Migrations
                 name: "Prizes",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "TEXT", nullable: false),
-                    CampaignId = table.Column<Guid>(type: "TEXT", nullable: false),
-                    Name = table.Column<string>(type: "TEXT", maxLength: 255, nullable: false),
-                    Description = table.Column<string>(type: "TEXT", maxLength: 1000, nullable: true),
-                    Value = table.Column<decimal>(type: "TEXT", precision: 10, scale: 2, nullable: true),
-                    Currency = table.Column<string>(type: "TEXT", maxLength: 3, nullable: true, defaultValue: "CAD"),
-                    TotalQuantity = table.Column<int>(type: "INTEGER", nullable: false),
-                    RemainingQuantity = table.Column<int>(type: "INTEGER", nullable: false),
-                    WinProbability = table.Column<decimal>(type: "TEXT", precision: 5, scale: 4, nullable: false),
-                    IsActive = table.Column<bool>(type: "INTEGER", nullable: false),
-                    HasLocationSpecificInventory = table.Column<bool>(type: "INTEGER", nullable: false),
-                    CreatedAt = table.Column<DateTime>(type: "TEXT", nullable: false),
-                    UpdatedAt = table.Column<DateTime>(type: "TEXT", nullable: false)
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    CampaignId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: false),
+                    Description = table.Column<string>(type: "nvarchar(1000)", maxLength: 1000, nullable: true),
+                    Value = table.Column<decimal>(type: "decimal(10,2)", precision: 10, scale: 2, nullable: true),
+                    Currency = table.Column<string>(type: "nvarchar(3)", maxLength: 3, nullable: true, defaultValue: "CAD"),
+                    TotalQuantity = table.Column<int>(type: "int", nullable: false),
+                    RemainingQuantity = table.Column<int>(type: "int", nullable: false),
+                    WinProbability = table.Column<decimal>(type: "decimal(5,4)", precision: 5, scale: 4, nullable: false),
+                    IsActive = table.Column<bool>(type: "bit", nullable: false),
+                    HasLocationSpecificInventory = table.Column<bool>(type: "bit", nullable: false),
+                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -560,12 +559,12 @@ namespace Chanzup.Infrastructure.Migrations
                 name: "StaffLocationAccess",
                 columns: table => new
                 {
-                    StaffId = table.Column<Guid>(type: "TEXT", nullable: false),
-                    LocationId = table.Column<Guid>(type: "TEXT", nullable: false),
-                    Permissions = table.Column<int>(type: "INTEGER", nullable: false),
-                    IsActive = table.Column<bool>(type: "INTEGER", nullable: false),
-                    CreatedAt = table.Column<DateTime>(type: "TEXT", nullable: false),
-                    UpdatedAt = table.Column<DateTime>(type: "TEXT", nullable: false)
+                    StaffId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    LocationId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Permissions = table.Column<int>(type: "int", nullable: false),
+                    IsActive = table.Column<bool>(type: "bit", nullable: false),
+                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -574,8 +573,7 @@ namespace Chanzup.Infrastructure.Migrations
                         name: "FK_StaffLocationAccess_BusinessLocations_LocationId",
                         column: x => x.LocationId,
                         principalTable: "BusinessLocations",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "Id");
                     table.ForeignKey(
                         name: "FK_StaffLocationAccess_Staff_StaffId",
                         column: x => x.StaffId,
@@ -588,14 +586,14 @@ namespace Chanzup.Infrastructure.Migrations
                 name: "PlayerPrizes",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "TEXT", nullable: false),
-                    PlayerId = table.Column<Guid>(type: "TEXT", nullable: false),
-                    PrizeId = table.Column<Guid>(type: "TEXT", nullable: false),
-                    RedemptionCode = table.Column<string>(type: "TEXT", maxLength: 20, nullable: false),
-                    IsRedeemed = table.Column<bool>(type: "INTEGER", nullable: false),
-                    RedeemedAt = table.Column<DateTime>(type: "TEXT", nullable: true),
-                    ExpiresAt = table.Column<DateTime>(type: "TEXT", nullable: false),
-                    CreatedAt = table.Column<DateTime>(type: "TEXT", nullable: false)
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    PlayerId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    PrizeId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    RedemptionCode = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: false),
+                    IsRedeemed = table.Column<bool>(type: "bit", nullable: false),
+                    RedeemedAt = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    ExpiresAt = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -618,12 +616,12 @@ namespace Chanzup.Infrastructure.Migrations
                 name: "PrizeLocationInventories",
                 columns: table => new
                 {
-                    PrizeId = table.Column<Guid>(type: "TEXT", nullable: false),
-                    LocationId = table.Column<Guid>(type: "TEXT", nullable: false),
-                    TotalQuantity = table.Column<int>(type: "INTEGER", nullable: false),
-                    RemainingQuantity = table.Column<int>(type: "INTEGER", nullable: false),
-                    CreatedAt = table.Column<DateTime>(type: "TEXT", nullable: false),
-                    UpdatedAt = table.Column<DateTime>(type: "TEXT", nullable: false)
+                    PrizeId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    LocationId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    TotalQuantity = table.Column<int>(type: "int", nullable: false),
+                    RemainingQuantity = table.Column<int>(type: "int", nullable: false),
+                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -632,8 +630,7 @@ namespace Chanzup.Infrastructure.Migrations
                         name: "FK_PrizeLocationInventories_BusinessLocations_LocationId",
                         column: x => x.LocationId,
                         principalTable: "BusinessLocations",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "Id");
                     table.ForeignKey(
                         name: "FK_PrizeLocationInventories_Prizes_PrizeId",
                         column: x => x.PrizeId,
@@ -646,14 +643,14 @@ namespace Chanzup.Infrastructure.Migrations
                 name: "WheelSpins",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "TEXT", nullable: false),
-                    PlayerId = table.Column<Guid>(type: "TEXT", nullable: false),
-                    CampaignId = table.Column<Guid>(type: "TEXT", nullable: false),
-                    PrizeId = table.Column<Guid>(type: "TEXT", nullable: true),
-                    TokensSpent = table.Column<int>(type: "INTEGER", nullable: false),
-                    SpinResult = table.Column<string>(type: "TEXT", maxLength: 50, nullable: false),
-                    RandomSeed = table.Column<string>(type: "TEXT", maxLength: 255, nullable: false),
-                    CreatedAt = table.Column<DateTime>(type: "TEXT", nullable: false)
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    PlayerId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    CampaignId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    PrizeId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    TokensSpent = table.Column<int>(type: "int", nullable: false),
+                    SpinResult = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
+                    RandomSeed = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: false),
+                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -662,8 +659,7 @@ namespace Chanzup.Infrastructure.Migrations
                         name: "FK_WheelSpins_Campaigns_CampaignId",
                         column: x => x.CampaignId,
                         principalTable: "Campaigns",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "Id");
                     table.ForeignKey(
                         name: "FK_WheelSpins_Players_PlayerId",
                         column: x => x.PlayerId,
