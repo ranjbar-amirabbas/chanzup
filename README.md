@@ -252,7 +252,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 ## 🆘 Support
 
 ### Getting Help
-- **Issues**: [GitLab Issues](https://gitlab.com/amirabbas-ranjbar/chanzup/-/issues)
+- **Issues**: [GitHub Issues](https://github.com/ranjbar-amirabbas/chanzup/issues)
 - **Documentation**: Available in `/docs` folder
 - **API Reference**: https://localhost:7001/swagger
 
